@@ -5,7 +5,7 @@ import urllib.request
 # --- НАСТРОЙКИ УСТАНОВКИ ---
 VERSION = "0.1"
 BASE_DIR = "/storage/emulated/0/AntOSMobile"
-GITHUB_RAW = "https://raw.githubusercontent.com/galexa233/AntOS-setup-mobile/main/setup/run.py"
+GITHUB_RAW = "https://raw.githubusercontent.com/galexa233/AntOS-setup-mobile/main/run.py"
 
 # Список папок, которые создаст установщик
 FOLDERS = [
