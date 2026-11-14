@@ -1,9 +1,11 @@
 import os
 import sys
+import urllib.request
 
 # --- НАСТРОЙКИ УСТАНОВКИ ---
 VERSION = "0.1"
 BASE_DIR = "/storage/emulated/0/AntOSMobile"
+GITHUB_RAW = "https://raw.githubusercontent.com/galexa233/AntOS-setup-mobile/main/setup/run.py"
 
 # Список папок, которые создаст установщик
 FOLDERS = [
@@ -30,7 +32,7 @@ def install():
     print("=" * 35)
     print("     УСТАНОВКА AntOS Mobile v0.1")
     print("=" * 35)
-    
+
     # 1. Создаем базовую папку, если ее нет
     if not os.path.exists(BASE_DIR):
         try:
@@ -57,11 +59,21 @@ def install():
                 f.write(content)
             print_boot(f"Создан файл: {file_path}")
 
+    # 4. Скачиваем файл ОС (run.py) с GitHub
+    run_file = os.path.join(BASE_DIR, "setup", "run.py")
+    print_boot("Загрузка ядра системы (run.py) с GitHub...")
+    try:
+        urllib.request.urlretrieve(GITHUB_RAW, run_file)
+        print_boot("Файл run.py успешно скачан!")
+    except Exception as e:
+        print(f"\n[ОШИБКА] Не удалось скачать run.py: {e}")
+        print("Проверьте интернет или ссылку.")
+
     print("=" * 35)
     print("УСТАНОВКА ЗАВЕРШЕНА УСПЕШНО!")
     print("=" * 35)
 
-    # 4. Проверка библиотеки Kivy
+    # 5. Проверка библиотеки Kivy
     try:
         import kivy
         print_boot("Проверка Kivy: ОК")
@@ -69,19 +81,16 @@ def install():
         print("\n[ВНИМАНИЕ] Библиотека Kivy не установлена!")
         print("Без нее графическая ОС не запустится.")
         print("Откройте Pydroid 3 -> Pip -> введите kivy -> Install\n")
-        return # Останавливаемся, если нет Киви
+        return 
 
-    # 5. Запуск ОС
-    run_file = os.path.join(BASE_DIR, "setup", "run.py")
+    # 6. Запуск ОС
     if os.path.exists(run_file):
         print_boot("Запуск системы...")
-        # Небольшая пауза для красоты
         import time
         time.sleep(1)
         os.system(f"python {run_file}")
     else:
-        print("\n[ОШИБКА] Файл setup/run.py не найден!")
-        print("Скачайте его с GitHub и положите в папку setup.")
+        print("\n[ОШИБКА] Файл setup/run.py так и не появился.")
 
 if __name__ == "__main__":
     install()
